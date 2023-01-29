@@ -2,6 +2,8 @@
 
 import sys
 
+from typing import Bool
+
 # network calculator based on 2 inputs: 
 # ipv4 address and subnet mask, both in
 # dotted-decimal format
@@ -20,18 +22,18 @@ INPUT_KEYS = ['ip_add', 'sub_mask']
 OUTPUT_KEYS = ['wildcard', 'network', 'bcast', 'hosts']
 
 
-def checkIP(address):
+def is_valid_ip_address(address: str) -> Bool:
     '''
     --checks 4-item list as ipv4 address--
     input is dotted-decimal ipv4 address as string
-    and returns True if it is a valid
+    and returns True if it is a 'generically' valid IPv4
     address and False if not
     DOES NOT CHECK IF address IS THE NETWORK OR
     BROADCAST ADDRESS
     '''
     # need to check:
     # len = 4
-    # each block is <= 255
+    # each block is <= 255 (decimal)
     if address.count('.') != 3:
         return False
     else:
@@ -47,7 +49,7 @@ def checkIP(address):
                 return False
     return True
         
-def checkSubMask(address):
+def is_valid_subnet_mask(address: str) -> Bool:
     '''
     checks 4-item list as ipv4 address
     and returns True if it is a valid
@@ -79,7 +81,7 @@ def checkSubMask(address):
         
 
 
-def ipv4ToBin(address):
+def ipv4ToBin(address: str) -> str:
     '''
     takes in dotted-decimal ipv4 address 
     # takes in 4-item list as
@@ -99,7 +101,7 @@ def ipv4ToBin(address):
 
 
 
-def binToIPv4(address):
+def binToIPv4(address: int) -> str:
     '''
     takes in 32-bit unsigned integer and
     returns dotted-decimal string
@@ -116,7 +118,7 @@ def binToIPv4(address):
 
 
 
-def get_wildcard(mask):
+def get_wildcard(mask: str) -> str:
     '''
     calculates wildcard mask based on subnet mask
     subnet mask input as string
@@ -212,11 +214,11 @@ def get_input(None) -> None:
     inp_msg = ['IPv4 dotted-decimal address:\n > ', 'IPv4 dotted-decimal subnet mask:\n > ']
     ip_info = [input(inp_msg[a0]).strip() for a0 in range(2)]
     # check both inputs, subnet mask first and then ip address based on subnet mask
-    if checkSubMask(ip_info[1]) == False:
+    if is_valid_subnet_mask(ip_info[1]) == False:
         print('Invalid subnet mask, please enter a valid dotted-decimal IPv4 mask.')
         # THIS RETURN STATEMENT STOPS THE PROGRAM ENTIRELY, TRACEBACK TO RETURN 0 IN MAIN
         return 0
-    if checkIP(ip_info[0]) == False:
+    if is_valid_ip_address(ip_info[0]) == False:
         print('Invalid IP address, please enter a valid dotted-decimal IPv4 address.')
         # THIS RETURN STATEMENT STOPS THE PROGRAM ENTIRELY, TRACEBACK TO RETURN 0 IN MAIN
         return 0
