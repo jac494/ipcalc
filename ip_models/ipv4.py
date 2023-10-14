@@ -78,3 +78,36 @@ class IPv4Address(object):
                 )
         octet_bin_list = [bin(int(octet))[2:].zfill(8) for octet in octet_str_list]
         return int("".join(octet_bin_list), 2)
+
+
+class IPv4NetMask(IPv4Address):
+    valid_subnet_masks = [
+        IPv4Address(
+            int("1" * mask_length + "0" * (32 - mask_length), 2)
+        )
+        for mask_length in range(33)
+    ]
+
+    def __init__(self, mask_repr):
+        self.mask_length = None
+        if isinstance(mask_repr, int):
+            if mask_repr not in range(33):
+                raise AddressException(
+                    "Subnet mask bit length must be a positive integer between 0 and 32, inclusive"
+                )
+            mask_bits_as_str = "1" * mask_repr + "0" * (32 - mask_repr)
+            mask_32bit_int = int(mask_bits_as_str, 2)
+            self.mask_length = mask_repr
+            super().__init__(mask_32bit_int)
+        if isinstance(mask_repr, str):
+            super().__init__(address_repr=mask_repr)
+            if self not in self.valid_subnet_masks:
+                raise AddressException(f"{mask_repr} is not a valid subnet mask")
+            self.mask_length = self._calculate_mask_length()
+
+    def _calculate_mask_length(self):
+        return bin(self.address_int).count("1")
+
+
+class IPv4Network(object):
+    pass
