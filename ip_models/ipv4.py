@@ -31,10 +31,10 @@ class IPv4Address(object):
 
     def __str__(self):
         return self.address_str
-    
+
     def __repr__(self):
         return self.address_str
-    
+
     def __int__(self):
         return self.address_int
 
@@ -69,8 +69,12 @@ class IPv4Address(object):
             )
         for octet in octet_str_list:
             if int(octet) < 0:
-                raise AddressException(f"Invalid IPv4 address {dotted_decimal_octet_str} IPv4 octet cannot be less than zero")
+                raise AddressException(
+                    f"Invalid IPv4 address {dotted_decimal_octet_str} IPv4 octet cannot be less than zero"
+                )
             elif int(octet) > 255:
-                raise AddressException(f"Invalid IPv4 address {dotted_decimal_octet_str} IPv4 octet cannot be greater than 255")
+                raise AddressException(
+                    f"Invalid IPv4 address {dotted_decimal_octet_str} IPv4 octet cannot be greater than 255"
+                )
         octet_bin_list = [bin(int(octet))[2:].zfill(8) for octet in octet_str_list]
         return int("".join(octet_bin_list), 2)
