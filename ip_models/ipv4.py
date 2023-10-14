@@ -82,9 +82,7 @@ class IPv4Address(object):
 
 class IPv4NetMask(IPv4Address):
     valid_subnet_masks = [
-        IPv4Address(
-            int("1" * mask_length + "0" * (32 - mask_length), 2)
-        )
+        IPv4Address(int("1" * mask_length + "0" * (32 - mask_length), 2))
         for mask_length in range(33)
     ]
 
